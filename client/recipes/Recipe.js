@@ -1,7 +1,13 @@
+Template.Recipe.onCreated(function(){
+  this.editMode = new ReactiveVar(false);
+});
 
 Template.Recipe.helpers({
     updateRecipeId: function() { 
       return this._id;
+    },
+    editMode: function () {
+      return Template.instance().editMode.get();
     }
 });
 
@@ -12,7 +18,8 @@ Template.Recipe.events({
   'click .fa-trash': function() {
     Meteor.call('deleteRecipe', this._id);
   },
-  'click .fa-pencil': function() {
-    Session.set('editMode', !Session.get('editMode'));
-  },
+  'click .fa-pencil': function(event, template) {
+    Template.instance().editMode.set(!template.editMode.get());
+    console.log('editMode:', !template.editMode.get());
+  }
 });
